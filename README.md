@@ -34,7 +34,9 @@ Here's what the project looks like in action:
 <td width="50%">
 
 ### AI Productivity Dashboard
+
 ![Dashboard](backend/images/image1.png)
+
 *Enter your daily metrics to get predictions*
 
 </td>
@@ -42,6 +44,7 @@ Here's what the project looks like in action:
 
 ### Prediction Results  
 ![Prediction](backend/images/image_2.png)
+
 *Real-time productivity score and analysis*
 
 </td>
@@ -51,6 +54,7 @@ Here's what the project looks like in action:
 
 ### Model Comparison
 ![Model Comparison](backend/images/image_3.png)
+
 *Comparing different models performance*
 
 </td>
