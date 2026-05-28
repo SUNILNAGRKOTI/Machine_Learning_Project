@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Productivity Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="dark-mode"> <header class="header">
+        <div class="container header-flex">
+            <div class="logo">
+                <h1><i class="fas fa-chart-line"></i> AI Productivity Dashboard</h1>
+                <p>Predict your daily productivity based on your activities using Machine Learning</p>
+            </div>
+            <button id="darkModeToggle" class="dark-mode-btn" title="Toggle Dark/Light Mode">
+                <i class="fas fa-sun" id="theme-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-wrapper">
+            <div class="input-section">
+                <div class="form-card" id="inputCard">
+                    <h2><i class="fas fa-keyboard"></i> Enter Your Daily Activities</h2>
+                    <p class="subtitle">Fill in your daily metrics to predict productivity</p>
+                    
+                    <form id="predictionForm">
+                        <div class="form-group">
+                            <label for="sleep">
+                                <span class="label-icon">😴</span>
+                                Sleep Duration (hours)
+                            </label>
+                            <input type="number" id="sleep" name="sleep" placeholder="e.g., 7.5" min="4" max="12" step="0.1" required>
+                            <small>Range: **4.0 to 12.0** hours. (Recommended: 7-9 hours)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="study">
+                                <span class="label-icon">📚</span>
+                                Study Hours (hours)
+                            </label>
+                            <input type="number" id="study" name="study" placeholder="e.g., 6.0" min="0" max="12" step="0.1" required>
+                            <small>Range: **0.0 to 12.0** hours. (Focused study time)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="screen">
+                                <span class="label-icon">📱</span>
+                                Screen Time (hours)
+                            </label>
+                            <input type="number" id="screen" name="screen" placeholder="e.g., 3.2" min="0" max="10" step="0.1" required>
+                            <small>Range: **0.0 to 10.0** hours. (Non-essential usage)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activity">
+                                <span class="label-icon">🏃</span>
+                                Physical Activity (minutes)
+                            </label>
+                            <input type="number" id="activity" name="activity" placeholder="e.g., 45" min="0" max="180" step="1" required>
+                            <small>Range: **0 to 180** minutes. (Recommended: 30-60 minutes)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="caffeine">
+                                <span class="label-icon">☕</span>
+                                Caffeine Intake (cups)
+                            </label>
+                            <input type="number" id="caffeine" name="caffeine" placeholder="e.g., 2" min="0" max="5" step="0.5" required>
+                            <small>Range: **0 to 5.0** cups. (Coffee/tea/energy drinks)</small>
+                        </div>
+
+                        <button type="submit" class="predict-btn">
+                            <span class="btn-icon">⚡</span> PREDICT PRODUCTIVITY
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tips-card">
+                    <h3>💡 Quick Tips for Better Productivity</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Sleep 7-9 hours daily</li>
+                        <li><i class="fas fa-check-circle"></i> Limit screen time to 3-4 hours</li>
+                        <li><i class="fas fa-check-circle"></i> Exercise 30-60 minutes daily</li>
+                        <li><i class="fas fa-check-circle"></i> Don't exceed 3 cups of caffeine</li>
+                        <li><i class="fas fa-check-circle"></i> Study in focused 90-minute blocks</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-card hidden" id="resultsCard">
+                    <h2>🎯 Prediction Results</h2>
+                    
+                    <div class="status-container" id="statusContainer">
+                        <div class="status-badge" id="statusBadge">
+                            <span class="status-icon">📊</span>
+                            <span class="status-text">Processing...</span>
+                        </div>
+                    </div>
+
+                    <div class="score-display">
+                        <div class="score-value" id="scoreValue">--</div>
+                        <div class="score-label">Productivity Score (0-100)</div>
+                    </div>
+
+                    <div class="input-summary">
+                        <h3>📋 Your Input Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span class="summary-label">Sleep:</span>
+                                <span class="summary-value" id="summarySleep">--</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Study:</span>
+                                <span class="summary-value" id="summaryStudy">--</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Screen:</span>
+                                <span class="summary-value" id="summaryScreen">--</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Activity:</span>
+                                <span class="summary-value" id="summaryActivity">--</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Caffeine:</span>
+                                <span class="summary-value" id="summaryCaffeine">--</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Confidence:</span>
+                                <span class="summary-value" id="summaryConfidence">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendations">
+                        <h3>💬 Recommendations</h3>
+                        <ul id="recommendationsList">
+                            <li>Fill the form to get personalized recommendations</li>
+                        </ul>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-secondary" onclick="resetForm()">
+                            <span>🔄</span> Reset Form
+                        </button>
+                        <button class="btn-secondary" onclick="downloadReport()">
+                            <span>📥</span> Download Report
+                        </button>
+                    </div>
+                </div>
+
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">📊</div>
+                    <h3>No Predictions Yet</h3>
+                    <p>Fill in your daily activities on the left and click "Predict Productivity" to see results!</p>
+                </div>
+
+                <div class="visualizations-section hidden" id="visualizationsSection">
+                    <h3>📈 Visualizations</h3>
+                    
+                    <div class="chart-tabs">
+                        <button class="tab-btn active" onclick="showChart(event, 'featureChart')">
+                            Feature Impact
+                        </button>
+                        <button class="tab-btn" onclick="showChart(event, 'comparisonChart')">
+                            Comparison
+                        </button>
+                        <button class="tab-btn" onclick="showChart(event, 'trendChart')">
+                            Trend
+                        </button>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-wrapper active" id="featureChart">
+                            <canvas id="featureCanvas"></canvas>
+                        </div>
+                        <div class="chart-wrapper" id="comparisonChart">
+                            <canvas id="comparisonCanvas"></canvas>
+                        </div>
+                        <div class="chart-wrapper" id="trendChart">
+                            <canvas id="trendCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Productivity Prediction System | Machine Learning Project</p>
+        <p class="dev-credit">Developed by <strong>Ritik Rana</strong> and <strong>Sunil Nagarkoti</strong></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('darkModeToggle');
+            const icon = document.getElementById('theme-icon');
+
+            // Set initial state to Dark Mode based on CSS default
+            const isDarkInitial = document.body.classList.contains('dark-mode');
+            icon.classList.toggle('fa-sun', isDarkInitial);
+            icon.classList.toggle('fa-moon', !isDarkInitial);
+            toggle.title = isDarkInitial ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+
+
+            // Toggle listener
+            toggle.addEventListener('click', () => {
+                const isDark = !document.body.classList.contains('dark-mode');
+                document.body.classList.toggle('dark-mode', isDark);
+                icon.classList.toggle('fa-sun', isDark);
+                icon.classList.toggle('fa-moon', !isDark);
+                toggle.title = isDark ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+                // Charts need to be redrawn here in script.js to change colors, but we keep this simple here.
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
