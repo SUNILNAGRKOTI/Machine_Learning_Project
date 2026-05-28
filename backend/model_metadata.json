@@ -1,0 +1,18 @@
+{
+    "lr_r2": 0.9755267996351265,
+    "rf_r2": 0.98284145785877,
+    "features": [
+        "Sleep_Duration",
+        "Study_Hours",
+        "Screen_Time",
+        "Physical_Activity",
+        "Caffeine_Intake"
+    ],
+    "feature_importance": {
+        "Sleep_Duration": 0.2052443405277851,
+        "Study_Hours": 0.04244156995423228,
+        "Screen_Time": 0.218907472231433,
+        "Physical_Activity": 0.27156545245702096,
+        "Caffeine_Intake": 0.26184116482952846
+    }
+}
